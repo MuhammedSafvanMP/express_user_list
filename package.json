@@ -1,0 +1,16 @@
+{
+  "name": "express_list_of_user",
+  "version": "1.0.0",
+  "description": "Create a Express App to manage a list of users.",
+  "main": "server.js",
+  "scripts": {
+    "test": "start",
+    "start": "nodemon server.js"
+  },
+  "author": "Mhammed Safvan MP",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  }
+}
