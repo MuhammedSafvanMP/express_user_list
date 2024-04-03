@@ -41,6 +41,7 @@ exports.createUser = (request, response) => {
     return response.status(201).send("Created product");
 }
 
+// updating user put
 
 exports.updateUser = (request, response) => {
     const updateUser = userList.find((user) => user.id === request.params.id);
@@ -63,5 +64,18 @@ exports.updateUser = (request, response) => {
 
 
     return response.status(201).send("Modified user")
+}
 
+// delete user
+
+exports.deleteUser = (request, response) => {
+    const deleteUser = userList.findIndex((index) => index.id === request.params.id)
+
+    if(deleteUser == -1){
+        return response.status(404).send("Page not found")
+    }
+
+    userList.splice(deleteUser, 1);
+
+    return response.status(200).send("Delete successfuly")
 }

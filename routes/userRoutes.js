@@ -13,11 +13,12 @@ router.post('/', userController.createUser);
 
 // put edit the user
 
-router.put('/:id', userController.updateUser)
+router.put('/:id', userController.updateUser);
 
-router.use('*', (request, response, next) => {
-    response.status(404).send("404 Page not found");
-})
+// delete user
+
+router.delete('/:id', userController.deleteUser);
+
 
 
 
