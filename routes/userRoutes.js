@@ -8,9 +8,13 @@ router.get('/', userController.getAllUsers);
 // get pasific user with help of id
 router.get('/:id', userController.getUserId);
 
+// post create a user in user data
+router.post('/', userController.createUser);
+
 router.use('*', (request, response, next) => {
     response.status(404).send("404 Page not found");
 })
+
 
 
 module.exports = router;
