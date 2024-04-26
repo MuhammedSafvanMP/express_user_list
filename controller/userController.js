@@ -40,7 +40,7 @@ exports.createUser = (request, response) => {
     })
 
     fs.writeFile("./data/userData.json", JSON.stringify(userList), (writeErr) => {
-        if (writeErr) {
+        if (writeErr) { 
             return response.status(500).json({message: "Internal Server Error: Failed to create user."});
         }
     });
