@@ -1,6 +1,7 @@
 const userList = require('../data/userData.json');
 const crypto = require('crypto');
 const { use } = require('../routes/userRoutes');
+const fs = require("fs");
 
 
 // get all user data from userlist
@@ -14,7 +15,7 @@ exports.getAllUsers = (request, response) => {
 exports.getUserId = (request, response) => {
     const userId = userList.find((userId) => userId.id === request.params.id)
     if(!userId){
-         response.status(204).send(" No Content");
+         response.status(204).json({message: " No Content"});
     }
      response.status(302).json(userId)
 }
@@ -26,7 +27,7 @@ exports.createUser = (request, response) => {
     const {name, email, userName} = request.body
 
     if(!name || !email || !userName){
-      return  response.status(422).send(" Unprocessable Content")
+      return  response.status(422).json({ message : " Unprocessable Content"})
     }
 
     const id = crypto.randomUUID();
@@ -38,7 +39,14 @@ exports.createUser = (request, response) => {
         userName
     })
 
-    return response.status(201).send("Created product");
+    fs.writeFile("./data/userData.json", JSON.stringify(userList), (writeErr) => {
+        if (writeErr) {
+            return response.status(500).json({message: "Internal Server Error: Failed to create user."});
+        }
+    });
+
+
+    return response.status(201).json({message: "Created new user"});
 }
 
 // updating user put
@@ -47,7 +55,7 @@ exports.updateUser = (request, response) => {
     const updateUser = userList.find((user) => user.id === request.params.id);
 
     if(!updateUser){
-       return response.status(400).send(" Bad Request");   
+       return response.status(400).json({message: " Bad Request"});   
     }
 
     const {name, email, userName} = request.body
@@ -63,7 +71,7 @@ exports.updateUser = (request, response) => {
     
 
 
-    return response.status(201).send("Modified user")
+    return response.status(201).json({message: "Modified user"})
 }
 
 // delete user
@@ -72,10 +80,10 @@ exports.deleteUser = (request, response) => {
     const deleteUser = userList.findIndex((index) => index.id === request.params.id)
 
     if(deleteUser == -1){
-        return response.status(404).send("Page not found")
+        return response.status(404).json({message: "Page not found"})
     }
 
     userList.splice(deleteUser, 1);
 
-    return response.status(200).send("Delete successfuly")
+    return response.status(200).json({message: "Delete successfuly"})
 }
