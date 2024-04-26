@@ -52,27 +52,29 @@ exports.createUser = (request, response) => {
 // updating user put
 
 exports.updateUser = (request, response) => {
-    const updateUser = userList.find((user) => user.id === request.params.id);
+    const updateUserIndex = userList.findIndex((user) => user.id === request.params.id);
 
-    if(!updateUser){
-       return response.status(400).json({message: " Bad Request"});   
+    if (updateUserIndex === -1) {
+        return response.status(400).json({ message: "Bad Request: User not found" });
     }
 
-    const {name, email, userName} = request.body
-  
-    // assign new datas
-    
-    if(name)
-        updateUser.name = name;
-    if(email)
-        updateUser.email = email;
-    if(userName)
-        updateUser.userName = userName;
-    
+    const updateUser = userList[updateUserIndex];
 
+    const { name, email, userName } = request.body;
 
-    return response.status(201).json({message: "Modified user"})
-}
+    // Update user data if new data is provided
+    if (name) updateUser.name = name;
+    if (email) updateUser.email = email;
+    if (userName) updateUser.userName = userName;
+
+    // Write updated userList to the file
+    fs.writeFile("./data/userData.json", JSON.stringify(userList), (writeErr) => {
+        if (writeErr) {
+            return response.status(500).json({ message: "Internal Server Error: Failed to update user" });
+        }
+        return response.status(200).json({ message: "User modified successfully" });
+    });
+};
 
 // delete user
 
