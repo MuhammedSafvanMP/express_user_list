@@ -77,13 +77,19 @@ exports.updateUser = (request, response) => {
 // delete user
 
 exports.deleteUser = (request, response) => {
-    const deleteUser = userList.findIndex((index) => index.id === request.params.id)
+    const deleteUserIndex = userList.findIndex((user) => user.id === request.params.id);
 
-    if(deleteUser == -1){
-        return response.status(404).json({message: "Page not found"})
+    if (deleteUserIndex === -1) {
+        return response.status(404).json({ message: "User not found" });
     }
 
-    userList.splice(deleteUser, 1);
+    userList.splice(deleteUserIndex, 1);
 
-    return response.status(200).json({message: "Delete successfuly"})
-}
+    fs.writeFile("./data/userData.json", JSON.stringify(userList), (writeErr) => {
+        if (writeErr) {
+            return response.status(500).json({ message: "Internal Server Error: Failed to delete user." });
+        }
+
+        return response.status(200).json({ message: "User deleted successfully" });
+    });
+};
